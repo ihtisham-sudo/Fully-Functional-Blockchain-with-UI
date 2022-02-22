@@ -34,6 +34,12 @@ blockchain.prototype.createNewTransaction = function(amount, fromAddress, toAddr
     return this.getLastBlock['index'] + 1;
 }
 
+blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){
 
+    const dataAsString = previousBlockHash + nonce.tostring() + JSON.stringify(currentBlockData);
+    const hash = sha256(dataAsString);
+    return hash;
+
+}
 
 module.exports = blockchain;    
