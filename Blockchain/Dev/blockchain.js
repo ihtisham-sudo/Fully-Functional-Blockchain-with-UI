@@ -24,15 +24,14 @@ blockchain.prototype.getLastBlock = function(){
     return this.chain[this.chain.length - 1]
 }
 
-blockchain.prototype.createNewTransaction = function(amount, fromAddress, toAddress){
-    const newTransaction =
-     {
+blockchain.prototype.createNewTransaction = function(amount, sender, recipient){
+    const newTransaction ={
     amount : amount,
-    fromAddress : fromAddress,
-    toAddress : toAddress
+    sender : sender,
+    recipient : recipient
     }
     this.pendingTransactions.push(newTransaction);
-    return this.getLastBlock['index'] + 1;
+    return this.getLastBlock() ['index'] + 1;
 }
 
 blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){

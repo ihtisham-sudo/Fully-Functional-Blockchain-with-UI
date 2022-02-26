@@ -11,9 +11,9 @@ app.get('/blockchain', function (req, res) {
     res.send(alfacoin);
 });
 
-app.post('/transactions', function(req, res){
-    console.log(req.body);
-    res.send(`The amount of transaction is ${req.body.amount} Alfacoin`);
+app.post('/transaction', function(req, res){
+    const blockIndex = alfacoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+    res.json({ note: `Transaction will be added in block ${blockIndex}.`});
 });
 
 app.get('/mine', function(req, res){
