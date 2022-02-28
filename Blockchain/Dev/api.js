@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
-const uuid = require('uuid/v1');
+const uuid = require('uuid').v1;
 const nodeAddress = uuid().split('-').join('');
 
 const alfacoin = new Blockchain();
@@ -20,23 +20,21 @@ app.post('/transaction', function(req, res){
 });
 
 app.get('/mine', function(req, res){
+
     const lastBlock = alfacoin.getLastBlock();
     const previousBlockHash = lastBlock['Hash'];
     const currentBlockData = {
-        transactions : alfacoin.pendingTransactions,
+        transactions: alfacoin.pendingTransactions,
         index : lastBlock['index'] + 1
     };
     const nonce = alfacoin.proofOfWork(previousBlockHash, currentBlockData);
     const blockHash = alfacoin.hashBlock(previousBlockHash, currentBlockData, nonce);
-
-    alfacoin.createNewTransaction(12.5, "00", nodeAddress);
-    
+    alfacoin.createNewTransaction(12.5, "00", nodeAddress );
     const newBlock = alfacoin.createNewBlock(nonce, previousBlockHash, blockHash);
     res.json({
-        note: "New Block mined successfully",
-        block : newBlock
+        note: "New Block mined successfully.",
+        block: newBlock
     });
-
 });
 
 
