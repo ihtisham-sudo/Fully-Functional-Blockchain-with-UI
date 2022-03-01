@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error no test specified\" && exit 1",
-    "start": "nodemon --watch Dev -e js Dev/api.js"
+    "node_1": "nodemon --watch Dev -e js Dev/netnode.js 3001 http://localhost:3001",
+    "node_2": "nodemon --watch Dev -e js Dev/netnode.js 3002 http://localhost:3002",
+    "node_3": "nodemon --watch Dev -e js Dev/netnode.js 3003 http://localhost:3003",
+    "node_4": "nodemon --watch Dev -e js Dev/netnode.js 3004 http://localhost:3004",
+    "node_5": "nodemon --watch Dev -e js Dev/netnode.js 3005 http://localhost:3005"
   },
   "dependencies": {
     "body-parser": "^1.19.2",
