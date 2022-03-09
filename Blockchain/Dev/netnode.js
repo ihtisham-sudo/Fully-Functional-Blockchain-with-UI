@@ -46,7 +46,7 @@ app.post('/register-and-broadcast-node', function(req, res){
     const regNodePromises = [];
     alfacoin.networkNodes.forEach(networkNodeUrl => {
         const requestOptions = {
-            url: networkNodeUrl + '/register-node',
+            uri: networkNodeUrl + '/register-node',
             method: 'POST',
             body : { newNodeUrl : newNodeUrl},
             json : true
@@ -55,16 +55,36 @@ app.post('/register-and-broadcast-node', function(req, res){
     });
     Promise.all(regNodePromises)
     .then(data => {
-        
+        const bulkRegisterOptions = {
+            uri: newNodeUrl + '/register-nodes-bulk',
+            method : 'POST',
+            body : { allNetworkNodes : [...alfacoin.networkNodes, alfacoin.currentNodeUrl]},
+            json : true
+        };
+        return rp(bulkRegisterOptions);
+    })
+    .then (data => {
+        res.json({ note : "New node registered with network successfully."});
     });
 }); 
 
 app.post('/register-node', function(req, res){
+    const newNodeUrl = req.body.newNodeUrl;
+    const nodeNotAlreadyPresent = alfacoin.networkNodes.indexOf(newNodeUrl) == -1;
+    const notCurrentNode = alfacoin.currentNodeurl !== newNodeUrl;
+    if (nodeNotAlreadyPresent && notCurrentNode) alfacoin.networkNodes.push(newNodeUrl);
+    res.json({note : 'New node registered successfully.'});
 
 });
 
 app.post('/register-nodes-bulk', function(req, res){
-
+    const allNetworkNodes =  req.body.allNetworkNodes;
+    allNetworkNodes.forEach(networkNodeUrl =>{
+        const nodeNotAlreadyPresent = alfacoin.networkNodes.indexOf(networkNodeUrl) == -1; 
+        const notCurrentNode = alfacoin.currentNodeurl !== networkNodeUrl;
+        if(nodeNotAlreadyPresent && notCurrentNode) alfacoin.networkNodes.push(networkNodeUrl);
+    });
+    res.json({ note: 'Bulk Registration Successfull' });
 });
 
 
