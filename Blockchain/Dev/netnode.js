@@ -74,7 +74,7 @@ app.post('/register-node', function(req, res){
     const notCurrentNode = alfacoin.currentNodeurl !== newNodeUrl;
     if (nodeNotAlreadyPresent && notCurrentNode) alfacoin.networkNodes.push(newNodeUrl);
     res.json({note : 'New node registered successfully.'});
-
+    
 });
 
 app.post('/register-nodes-bulk', function(req, res){
