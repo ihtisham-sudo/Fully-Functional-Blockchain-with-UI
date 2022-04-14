@@ -1,5 +1,6 @@
 const sha256 = require('sha256');
 const currentNodeurl = process.argv[3];
+const uuid = require('uuid').v1;
 
 function blockchain(){
     this.chain = [];
@@ -7,7 +8,7 @@ function blockchain(){
     this.currentNodeurl = currentNodeurl;
     this.networkNodes = [];
     this.createNewBlock(100, '0', '0');
-}
+};
 
 blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, Hash){
     const newBlock = {
@@ -17,25 +18,30 @@ blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, Hash){
         nonce : nonce,
         Hash : Hash,
         previousBlockHash : previousBlockHash
-    }
+    };
     this.pendingTransactions = [];
     this.chain.push(newBlock);
     return newBlock;
-}
+};
 
 blockchain.prototype.getLastBlock = function(){
     return this.chain[this.chain.length - 1]
-}
+};
 
 blockchain.prototype.createNewTransaction = function(amount, sender, recipient){
     const newTransaction ={
     amount : amount,
     sender : sender,
-    recipient : recipient
+    recipient : recipient,
+    transactionId : uuid().split('-').join('')
     }
-    this.pendingTransactions.push(newTransaction);
-    return this.getLastBlock() ['index'] + 1;
-}
+    return newTransaction;
+};
+
+blockchain.prototype.addTransactionToPendingTransactions = function(transactionObj){
+    this.pendingTransactions.push(transactionObj);
+    return this.getLastBlock['index'] + 1;
+};
 
 blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){
 
@@ -43,7 +49,7 @@ blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
     const hash = sha256(dataAsString);
     return hash;
 
-}
+};
 
 blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData){
     let nonce = 0;
@@ -52,7 +58,7 @@ blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
         nonce++;
         hash = this.hashBlock(previousBlockHash, currentBlockData,nonce);
             
-    }
+    };
     return nonce;
-}
+};
 module.exports = blockchain;   
